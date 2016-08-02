@@ -4,6 +4,7 @@ import com.github.alejandrocq.BotConfig;
 import com.github.alejandrocq.commands.StartCommand;
 import org.telegram.telegrambots.TelegramApiException;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
+import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.telegrambots.bots.TelegramLongPollingCommandBot;
 import org.telegram.telegrambots.logging.BotLogger;
@@ -29,6 +30,20 @@ public class JavaSandboxHandler extends TelegramLongPollingCommandBot {
 
     @Override public void processNonCommandUpdate(Update update) {
         //Handle situations when the user doesn't type a command
+
+        Message message = update.getMessage();
+
+        if (message.hasText()) {
+            SendMessage msgToSend = new SendMessage();
+            msgToSend.setChatId(message.getChatId().toString());
+            msgToSend.setText("Please type a command to begin");
+
+            try {
+                sendMessage(msgToSend);
+            } catch (TelegramApiException e) {
+                BotLogger.error(LOGTAG, e);
+            }
+        }
     }
 
     @Override public String getBotToken() {
