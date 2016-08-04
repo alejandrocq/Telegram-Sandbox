@@ -32,7 +32,7 @@ public class JavaSandboxHandler extends TelegramLongPollingBot {
     }
 
     @Override public String getBotToken() {
-        return BotConfig.JAVA_SANDBOX_BOT_TOKEN;
+        return System.getProperty("telegram.token", System.getenv("TELEGRAM_TOKEN"));
     }
 
     @Override public String getBotUsername() {
