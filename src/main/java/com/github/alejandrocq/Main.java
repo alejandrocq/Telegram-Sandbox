@@ -54,7 +54,11 @@ public class Main {
         {
             commands.register(new BotCommand("/start", "Command to start the bot") {
                 @Override public void execute(AbsSender sender, User user, Chat chat, String[] arguments) {
-                    send(chat, msg -> msg.setText("You have typed /start command"));
+                    if (arguments.length > 0) {
+                        send(chat, msg -> msg.setText("You have typed " + arguments[0] + " as payload."));
+                    } else {
+                        send(chat, msg -> msg.setText("You haven't typed any payload."));
+                    }
                 }
             });
             commands.register(new BotCommand("/subscribe", "Command to subscribe to this bot notification list") {
@@ -90,7 +94,6 @@ public class Main {
             log.info("Registered commands:\n" + commands.getRegisteredCommands()
                     .stream().map(c -> c.getCommandIdentifier() + " :: " + c.getDescription())
                     .collect(Collectors.joining("\n")));
-            // TODO this list of command should be sent to the botfather so command auto-completion works
 
             log.info("Starting message generator...");
             new Timer(true).scheduleAtFixedRate(new TimerTask() {
@@ -112,7 +115,6 @@ public class Main {
         }
 
         @Override public String getBotToken() {
-            // TODO tokens and bots should be created programmatically (eg. write to botfather using the tel. cli. api)
             return System.getProperty("telegram.token", System.getenv("TELEGRAM_TOKEN"));
         }
 
